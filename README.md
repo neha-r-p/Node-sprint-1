@@ -26,7 +26,11 @@ Demonstrate your understanding of this Sprint's concepts by answering the follow
 
 - [ ] Mention two parts of Express that you learned about this week.
 
+    Express is riddled (in a good, functional way) with middleware, such as express.json(), .use(), etc. Secondly, it's a framework that abstracts the unnecessary stuff for a regular jo schmo like me from Node.js so we can write functional BE more easily.
+
 - [ ] Describe Middleware?
+
+    Functions called between the request and response in the order which they are read. Middleware can be built-in to Express, custom, or third-party.
 
 - [ ] Describe a Resource?
 
