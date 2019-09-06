@@ -49,8 +49,6 @@ router.post("/", validateProject, (req, res) => {
     });
 });
 
-//update project (name and description)
-
 //remove project
 router.delete("/:id", validateProjectId, (req, res) => {
     const { id } = req.params;
@@ -68,6 +66,10 @@ router.delete("/:id", validateProjectId, (req, res) => {
         res.status(500).json({ error: "Error removing project" })
     })
 })
+
+//update project (name and description)
+
+
 
 //toggle completed (not required, boolean)
 
