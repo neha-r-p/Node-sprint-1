@@ -34,12 +34,44 @@ router.post("/", validateAction, (req, res) => {
 //update action (description and notes)
 
 //remove action
+router.delete("/:id", validateActionId, (req, res) => {
+    const { id } = req.params;
+  
+    actionsDb
+      .remove(id)
+      .then(action => {
+        if (action) {
+          res.status(204).json({ message: "Successfully deleted the action" });
+        } else {
+          res
+            .status(404)
+            .json({ error: "The action with the specified ID does not exist" });
+        }
+      })
+      .catch(err => {
+        console.log(err);
+        res.status(500).json({ error: "Error removing action" });
+      });
+  });
 
 //toggle completed (not required, boolean)
 
 
 
 // middleware
+
+function validateActionId(req, res, next) {
+    const { id } = req.params;
+  
+    actionsDb.get(id).then(id => {
+      if (id) {
+        req.action = req.body;
+        next();
+      } else {
+        res.status(400).json({ message: "action with id doesn't exist" });
+      }
+    });
+  }
 
 function validateAction(req, res, next){
     const { project_id, description, notes } = req.body;
@@ -48,7 +80,6 @@ function validateAction(req, res, next){
         res.status(400).json({ error: "Decription must be less than 128 characters" })}
         else { next();}
     }
-    
      else {
         res.status(400).json({ error: "Missing action data" })
     }
