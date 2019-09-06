@@ -18,6 +18,19 @@ router.get("/", (req, res) => {
 });
 
 //get project with id
+router.get("/:id", validateProjectId, (req, res) => {
+  const { id } = req.params;
+
+  projectsDb
+    .get(id)
+    .then(project => {
+      res.status(200).json(project);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ error: "Project could not be retrieved" });
+    });
+});
 
 //insert project (post) (name and description)
 
@@ -27,10 +40,20 @@ router.get("/", (req, res) => {
 
 //toggle completed (not required, boolean)
 
-
 //Custom Middleware
 
+function validateProjectId(req, res, next) {
+  const { id } = req.params;
 
+  projectsDb.get(id).then(id => {
+    if (id) {
+      req.project = req.body;
+    } else {
+      res.status(400).json({ message: "invalid project id" });
+    }
+  });
 
+  next();
+}
 
 module.exports = router;
