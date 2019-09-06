@@ -46,8 +46,6 @@ router.get("/:id/actions", validateProjectId, (req, res) => {
     })
 })
 
-
-
 //insert project (post) (name and description)
 
 router.post("/", validateProject, (req, res) => {
