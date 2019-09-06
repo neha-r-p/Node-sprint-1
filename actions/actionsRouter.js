@@ -30,8 +30,25 @@ router.post("/", validateAction, (req, res) => {
     })
 })
 
-
 //update action (description and notes)
+router.put("/:id", validateActionId, validateUpdatedAction, (req, res) => {
+    const { id } = req.params;
+    const { description, notes } = req.body;
+  
+    actionsDb
+      .update(id, { description, notes })
+      .then(updated => {
+        if (updated) {
+          res.status(200).json(updated);
+        } else {
+          res.status(404).json({ error: "Action not found" });
+        }
+      })
+      .catch(err => {
+        console.log(err);
+        res.status(500).json({ error: "Action could not be updated" });
+      });
+  });
 
 //remove action
 router.delete("/:id", validateActionId, (req, res) => {
@@ -76,6 +93,18 @@ function validateActionId(req, res, next) {
 function validateAction(req, res, next){
     const { project_id, description, notes } = req.body;
     if(project_id && description !== "" && notes !== ""){
+        if(description.length > 128){
+        res.status(400).json({ error: "Decription must be less than 128 characters" })}
+        else { next();}
+    }
+     else {
+        res.status(400).json({ error: "Missing action data" })
+    }
+}
+
+function validateUpdatedAction(req, res, next){
+    const { description, notes } = req.body;
+    if(description !== "" && notes !== ""){
         if(description.length > 128){
         res.status(400).json({ error: "Decription must be less than 128 characters" })}
         else { next();}
