@@ -51,25 +51,45 @@ router.post("/", validateProject, (req, res) => {
 
 //remove project
 router.delete("/:id", validateProjectId, (req, res) => {
-    const { id } = req.params;
+  const { id } = req.params;
 
-    projectsDb.remove(id)
+  projectsDb
+    .remove(id)
     .then(project => {
-        if(project){
-            res.status(204).json({ message: "Successfully deleted the project" })
-        } else {
-            res.status(404).json({ error: "The project with the specified ID does not exist" })
-        }
+      if (project) {
+        res.status(204).json({ message: "Successfully deleted the project" });
+      } else {
+        res
+          .status(404)
+          .json({ error: "The project with the specified ID does not exist" });
+      }
     })
     .catch(err => {
-        console.log(err)
-        res.status(500).json({ error: "Error removing project" })
-    })
-})
+      console.log(err);
+      res.status(500).json({ error: "Error removing project" });
+    });
+});
 
 //update project (name and description)
 
+router.put("/:id", validateProjectId, (req, res) => {
+  const { id } = req.params;
+  const changes = req.body;
 
+  projectsDb
+    .update(id, changes)
+    .then(updated => {
+      if (updated) {
+        res.status(200).json(updated);
+      } else {
+        res.status(404).json({ error: "Project not found" });
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ error: "Project could not be updated" });
+    });
+});
 
 //toggle completed (not required, boolean)
 
