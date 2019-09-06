@@ -1,7 +1,20 @@
 const express = require('express')
-const router = express.Router
 
-//get array of all actions per project(project_id)
+const actionsDb = require('../data/helpers/actionModel');
+
+const router = express.Router();
+
+//get array of all actions
+router.get("/", (req, res) => {
+    actionsDb.get()
+    .then(a => {
+        res.status(200).json(a)
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).json({ error: "Actions could not be retrieved" })
+    })
+})
 
 
 //insert action (post) (project_id, description (128 character max), and notes)
