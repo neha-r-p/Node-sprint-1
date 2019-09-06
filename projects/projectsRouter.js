@@ -1,10 +1,21 @@
-const express = require('express')
+const express = require("express");
 
-const Project = require('../data/helpers/projectModel')
+const projectsDb = require("../data/helpers/projectModel");
 
-const router = express.Router
+const router = express.Router();
 
-//get array of all projects
+// get array of all projects
+router.get("/", (req, res) => {
+  projectsDb
+    .get()
+    .then(p => {
+      res.status(200).json(p);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ message: "Projects could not be retrieved." });
+    });
+});
 
 //get project with id
 
@@ -17,8 +28,7 @@ const router = express.Router
 //toggle completed (not required, boolean)
 
 
-
-
+//Custom Middleware
 
 
 
