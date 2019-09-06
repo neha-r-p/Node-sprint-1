@@ -32,6 +32,22 @@ router.get("/:id", validateProjectId, (req, res) => {
     });
 });
 
+// get project actions (based on ID)
+router.get("/:id/actions", validateProjectId, (req, res) => {
+    const { id } = req.params;
+
+    projectsDb.getProjectActions(id)
+    .then(actions => {
+        res.status(200).json(actions)
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).json({ error: "Actions for project not found" })
+    })
+})
+
+
+
 //insert project (post) (name and description)
 
 router.post("/", validateProject, (req, res) => {
