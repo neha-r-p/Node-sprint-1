@@ -52,6 +52,22 @@ router.post("/", validateProject, (req, res) => {
 //update project (name and description)
 
 //remove project
+router.delete("/:id", validateProjectId, (req, res) => {
+    const { id } = req.params;
+
+    projectsDb.remove(id)
+    .then(project => {
+        if(project){
+            res.status(204).json({ message: "Successfully deleted the project" })
+        } else {
+            res.status(404).json({ error: "The project with the specified ID does not exist" })
+        }
+    })
+    .catch(err => {
+        console.log(err)
+        res.status(500).json({ error: "Error removing project" })
+    })
+})
 
 //toggle completed (not required, boolean)
 
@@ -65,7 +81,7 @@ function validateProjectId(req, res, next) {
       req.project = req.body;
       next();
     } else {
-      res.status(400).json({ message: "invalid project id" });
+      res.status(400).json({ message: "project with id doesn't exist" });
     }
   });
 }
