@@ -34,6 +34,21 @@ router.get("/:id", validateProjectId, (req, res) => {
 
 //insert project (post) (name and description)
 
+router.post("/", validateProject, (req, res) => {
+  const newProject = req.body;
+  console.log("new project", newProject);
+
+  projectsDb
+    .insert(newProject)
+    .then(p => {
+      res.status(200).json(p);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ error: "Error creating project" });
+    });
+});
+
 //update project (name and description)
 
 //remove project
@@ -48,12 +63,23 @@ function validateProjectId(req, res, next) {
   projectsDb.get(id).then(id => {
     if (id) {
       req.project = req.body;
+      next();
     } else {
       res.status(400).json({ message: "invalid project id" });
     }
   });
+}
 
-  next();
+function validateProject(req, res, next) {
+  const { name, description } = req.body;
+
+  if (name && description) {
+    next();
+  } else if (name === "" || description === "") {
+    res.status(400).json({ error: "Both name and description required" });
+  } else {
+    res.status(400).json({ error: "Missing project data" });
+  }
 }
 
 module.exports = router;
