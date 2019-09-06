@@ -34,9 +34,15 @@ Demonstrate your understanding of this Sprint's concepts by answering the follow
 
 - [ ] Describe a Resource?
 
+    A resource is the term for different sub-applications. For example, in a blog a resource would be users, and another could be posts.
+
 - [ ] What can the API return to help clients know if a request was successful?
 
+    API can return status codes depending on the success of the request (usually status 200), and along with that you can chain a json message.
+
 - [ ] How can we partition our application into sub-applications?
+
+    We can use an express router
 
 ## Project Setup
 
